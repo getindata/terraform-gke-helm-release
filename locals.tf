@@ -1,4 +1,4 @@
-locals{
+locals {
   # GCP service account ids must be <= 30 chars matching regex ^[a-z](?:[-a-z0-9]{4,28}[a-z0-9])$
   # KSAs do not have this naming restriction.
   gcp_given_name = var.gcp_sa_name != null ? var.gcp_sa_name : trimsuffix(substr(var.name, 0, 30), "-")

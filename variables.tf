@@ -30,7 +30,7 @@ variable "location" {
 variable "k8s_sa_name" {
   description = "Name for the Kubernetes service account; overrides `var.name`. `cluster_name` and `location` must be set when this input is specified."
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "k8s_sa_project_id" {
@@ -78,7 +78,7 @@ variable "use_existing_context" {
 variable "skip_download" {
   description = "Whether to skip downloading gcloud (assumes gcloud and kubectl is already available outside the module)"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "module_depends_on" {
