@@ -1,19 +1,14 @@
-# Terraform Module Template
-
-
-> **Warning**:
-> This is a template document. Remember to **remove** all text in _italics_ and **update** Module name, Repo name and links/badges to the acual name of your GitHub repository/module!!!
+#GKE Helm release module
 
 <!--- Pick Cloud provider Badge -->
 <!---![Azure](https://img.shields.io/badge/azure-%230072C6.svg?style=for-the-badge&logo=microsoftazure&logoColor=white) -->
-<!---![Google Cloud](https://img.shields.io/badge/GoogleCloud-%234285F4.svg?style=for-the-badge&logo=google-cloud&logoColor=white) -->
-![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
+![Google Cloud](https://img.shields.io/badge/GoogleCloud-%234285F4.svg?style=for-the-badge&logo=google-cloud&logoColor=white)
 <!---![Snowflake](https://img.shields.io/badge/-SNOWFLAKE-249edc?style=for-the-badge&logo=snowflake&logoColor=white) -->
 ![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white)
 
 <!--- Replace repository name -->
-![License](https://badgen.net/github/license/getindata/terraform-module-template/)
-![Release](https://badgen.net/github/release/getindata/terraform-module-template/)
+![License](https://badgen.net/github/license/getindata/terraform-gke-helm-release/)
+![Release](https://badgen.net/github/release/getindata/terraform-gke-helm-release/)
 
 <p align="center">
   <img height="150" src="https://getindata.com/img/logo.svg">
@@ -22,24 +17,28 @@
 
 ---
 
-_Brief Description of MODULE:_
+Workload Identity is the recommended way to access GCP services from Kubernetes.
 
-* _What it does_
-* _What technologies it uses_
+This module creates:
+
+* IAM Service Account binding to roles/iam.workloadIdentityUser
+* Optionally, a Google Service Account
+* Optionally, a Kubernetes Service Account
 
 > **Warning**:
 > _When using "Invicton-Labs/deepmerge/null" module - pin `tflint` version to `v0.41.0` in [pre-commit.yaml](.github/workflows/pre-commit.yml) to avoid failing `tflint` checks_
 
 ## USAGE
-
-_Example usage of the module - terraform code snippet_
+The terraform-google-workload-identity can create service accounts for you, or you can use existing accounts; this applies for both the Google and Kubernetes accounts.
 
 ```terraform
-module "template" {
-  source = "getindata/template/null"
-  # version  = "x.x.x"
-
-  example_var = "foo"
+module "workload-identity" {
+  source     = "getindata/terraform-gke-helm-release"
+  name       = "my-application-name"
+  namespace  = "default"
+  project_id = "my-gcp-project-name"
+  roles      = ["roles/storage.admin", "roles/compute.admin"]
+}
 }
 ```
 

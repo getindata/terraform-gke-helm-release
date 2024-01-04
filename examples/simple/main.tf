@@ -1,8 +1,6 @@
-module "terraform_module_template" {
-  source = "../../"
-
-  example_var = "This is a example value."
-  sub_resource = {
-    example_var = "This is a example value of sub resource."
-  }
+module "workload-identity" {
+  source     = "../../"
+  ca_certificate = "ca-certificate"
+  endpoint = "k8s endpoint"
+  project_id = "project-id"
 }

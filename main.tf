@@ -1,36 +1,67 @@
-# Example resource that outputs the input value and 
-# echoes it's base64 encoded version locally 
+data "google_service_account" "cluster_service_account" {
+  count = var.use_existing_gcp_sa ? 1 : 0
 
-resource "null_resource" "output_input" {
-  count = local.enabled ? 1 : 0
+  account_id = local.gcp_given_name
+  project    = var.project_id
+}
 
-  triggers = {
-    name  = local.name_from_descriptor
-    input = var.example_var
-  }
+resource "google_service_account" "cluster_service_account" {
+  count = var.use_existing_gcp_sa ? 0 : 1
 
-  provisioner "local-exec" {
-    command = "echo ${var.example_var} | base64"
+  account_id   = local.gcp_given_name
+  display_name = substr("GCP SA bound to K8S SA ${local.k8s_sa_project_id}[${local.k8s_given_name}]", 0, 100)
+  project      = var.project_id
+}
+
+resource "kubernetes_service_account" "main" {
+  count = var.use_existing_k8s_sa ? 0 : 1
+
+  automount_service_account_token = var.automount_service_account_token
+  metadata {
+    name      = local.k8s_given_name
+    namespace = var.namespace
+    annotations = {
+      "iam.gke.io/gcp-service-account" = local.gcp_sa_email
+    }
   }
 }
 
-module "subresource_label" {
-  source  = "cloudposse/label/null"
-  version = "0.25.0"
-  context = module.this.context
+module "annotate-sa" {
+  source  = "terraform-google-modules/gcloud/google//modules/kubectl-wrapper"
+  version = "~> 3.1"
 
-  attributes = ["sub"]
+  enabled                     = var.use_existing_k8s_sa && var.annotate_k8s_sa
+  skip_download               = false
+  cluster_name                = var.cluster_name
+  cluster_location            = var.location
+  project_id                  = local.k8s_sa_project_id
+  impersonate_service_account = var.impersonate_service_account
+  use_existing_context        = var.use_existing_context
+
+  kubectl_create_command  = "kubectl annotate --overwrite sa -n ${local.output_k8s_namespace} ${local.k8s_given_name} iam.gke.io/gcp-service-account=${local.gcp_sa_email}"
+  kubectl_destroy_command = "kubectl annotate sa -n ${local.output_k8s_namespace} ${local.k8s_given_name} iam.gke.io/gcp-service-account-"
+
+  module_depends_on = var.module_depends_on
 }
 
-resource "null_resource" "subresource" {
-  count = local.enabled ? 1 : 0
+resource "google_service_account_iam_member" "main" {
+  service_account_id = var.use_existing_gcp_sa ? data.google_service_account.cluster_service_account[0].name : google_service_account.cluster_service_account[0].name
+  role               = "roles/iam.workloadIdentityUser"
+  member             = local.k8s_sa_gcp_derived_name
+}
 
-  triggers = {
-    name  = local.subresource_name_from_descriptor
-    input = var.sub_resource.example_var
-  }
+resource "google_project_iam_member" "workload_identity_sa_bindings" {
+  for_each = toset(var.roles)
 
-  provisioner "local-exec" {
-    command = "echo ${var.sub_resource.example_var} | base64"
-  }
+  project = var.project_id
+  role    = each.value
+  member  = local.gcp_sa_fqn
+}
+
+resource "google_project_iam_member" "workload_identity_sa_bindings_additional_projects" {
+  for_each = { for entry in local.sa_binding_additional_project : "${entry.project_id}.${entry.role_name}" => entry }
+
+  project = each.value.project_id
+  role    = each.value.role_name
+  member  = local.gcp_sa_fqn
 }
