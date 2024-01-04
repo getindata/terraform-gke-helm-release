@@ -26,12 +26,12 @@ resource "kubernetes_service_account" "main" {
   }
 }
 
-module "annotate-sa" {
+module "annotate_sa" {
   source  = "terraform-google-modules/gcloud/google//modules/kubectl-wrapper"
   version = "~> 3.1"
 
   enabled                     = var.use_existing_k8s_sa && var.annotate_k8s_sa
-  skip_download               = false
+  skip_download               = var.skip_download
   cluster_name                = var.cluster_name
   cluster_location            = var.location
   project_id                  = local.k8s_sa_project_id

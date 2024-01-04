@@ -1,11 +1,3 @@
-variable "endpoint" {
-  type = string
-}
-
-variable "ca_certificate" {
-  type = string
-}
-
 variable "project_id" {
   description = "GCP project ID"
   type        = string
@@ -38,19 +30,13 @@ variable "location" {
 variable "k8s_sa_name" {
   description = "Name for the Kubernetes service account; overrides `var.name`. `cluster_name` and `location` must be set when this input is specified."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "k8s_sa_project_id" {
   description = "GCP project ID of the k8s service account; overrides `var.project_id`."
   type        = string
   default     = null
-}
-
-variable "namespace" {
-  description = "Namespace for the Kubernetes service account"
-  type        = string
-  default     = "default"
 }
 
 variable "use_existing_k8s_sa" {
@@ -87,6 +73,12 @@ variable "use_existing_context" {
   description = "An optional flag to use local kubectl config context."
   type        = bool
   default     = false
+}
+
+variable "skip_download" {
+  description = "Whether to skip downloading gcloud (assumes gcloud and kubectl is already available outside the module)"
+  type        = bool
+  default     = true
 }
 
 variable "module_depends_on" {
