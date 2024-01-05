@@ -1,3 +1,9 @@
+config {
+  ignore_module = {
+    "terraform-google-modules/kubernetes-engine/google//modules/workload-identity" = true
+    "terraform-module/release/helm" = true
+  }
+}
 plugin "terraform" {
     enabled = true
     version = "0.5.0"

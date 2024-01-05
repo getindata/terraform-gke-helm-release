@@ -1,18 +1,10 @@
-variable "example_var" {
-  description = "Example variable passed into the module"
+variable "project_id" {
+  description = "GCP project ID"
   type        = string
 }
 
-variable "descriptor_name" {
-  description = "Name of the descriptor used to form a resource name"
-  type        = string
-  default     = "resource-type"
-}
-
-variable "sub_resource" {
-  description = "Some other resource that is part of stack/module"
-  type = object({
-    descriptor_name = optional(string, "sub-resource-type")
-    example_var     = string
-  })
+variable "roles" {
+  description = "A list of roles to be added to the created service account"
+  type        = list(string)
+  default     = ["roles/storage.admin", "roles/compute.admin"]
 }
