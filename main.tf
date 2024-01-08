@@ -7,19 +7,19 @@ module "workload_identity" {
   roles      = var.roles
 }
 
-module "jenkins" {
-  source  = "terraform-module/release/helm"
-  version = "2.8.1"
+resource "helm_release" "this" {
+  name       = var.name
+  repository = var.repository
+  chart      = var.chart
+  version    = var.chart_version
 
-  namespace  = var.namespace
-  repository = "https://charts.helm.sh/stable"
-  app = {
-    name          = "jenkins"
-    version       = "1.5.0"
-    chart         = "jenkins"
-    force_update  = true
-    wait          = false
-    recreate_pods = false
-    deploy        = 1
+  values = [
+    "${file(var.values)}"
+  ]
+
+  set {
+    name  = "serviceAccount.name"
+    value = "module.workload_identity.k8s_service_account_name"
   }
+
 }

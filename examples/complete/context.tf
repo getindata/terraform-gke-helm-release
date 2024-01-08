@@ -102,7 +102,7 @@ variable "enabled" {
 
 variable "namespace" {
   type        = string
-  default     = null
+  default     = "default"
   description = "ID element. Usually an abbreviation of your organization name, e.g. 'eg' or 'cp', to help ensure generated IDs are globally unique"
 }
 
@@ -126,7 +126,7 @@ variable "stage" {
 
 variable "name" {
   type        = string
-  default     = null
+  default     = "example-name"
   description = <<-EOT
     ID element. Usually the component or solution name, e.g. 'app' or 'jenkins'.
     This is the only ID element not also included as a `tag`.
