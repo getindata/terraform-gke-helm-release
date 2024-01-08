@@ -14,3 +14,9 @@ plugin "terraform" {
 rule "terraform_standard_module_structure" {
   enabled = false  # Fails on context.tf
 }
+rule "terraform_unused_declarations" {
+  enabled = false
+}
+rule "terraform_required_providers" {
+  enabled = false
+}

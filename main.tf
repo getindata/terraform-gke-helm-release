@@ -14,7 +14,7 @@ resource "helm_release" "example" {
   version    = var.chart_version
 
   values = [
-    "${file(var.values)}"
+    file(var.values)
   ]
 
   set {
