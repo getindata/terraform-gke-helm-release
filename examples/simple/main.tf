@@ -3,8 +3,8 @@ module "terraform_gke_helm_release" {
   name          = "example-name"
   namespace     = "default"
   project_id    = "example-project"
-  chart         = "Chart.yaml"
-  repository    = "../repository"
+  chart         = "app"
+  repository    = "./repository"
   chart_version = "0.1.0"
-  values        = "../repository/values.yaml"
+  values        = "./repository/values.yaml"
 }
