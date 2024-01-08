@@ -7,7 +7,7 @@ module "workload_identity" {
   roles      = var.roles
 }
 
-resource "helm_release" "this" {
+resource "helm_release" "example" {
   name       = var.name
   repository = var.repository
   chart      = var.chart

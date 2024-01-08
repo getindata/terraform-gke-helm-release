@@ -133,7 +133,7 @@ _Additional information that should be made public, for ex. how to solve known i
 
 | Name | Type |
 |------|------|
-| [helm_release.this](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) | resource |
+| [helm_release.example](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) | resource |
 <!-- END_TF_DOCS -->
 
 ## CONTRIBUTING
