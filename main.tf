@@ -7,11 +7,12 @@ module "workload_identity" {
   roles      = var.roles
 }
 
-resource "helm_release" "example" {
-  name       = var.name
+resource "helm_release" "this" {
+  count      = var.app["deploy"] ? 1 : 0
   repository = var.repository
-  chart      = var.chart
-  version    = var.chart_version
+  name       = var.app["name"]
+  chart      = var.app["chart"]
+  version    = var.app["version"]
 
   values = [
     file(var.values)

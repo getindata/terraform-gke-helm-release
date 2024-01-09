@@ -22,3 +22,7 @@ output "k8s_service_account_namespace" {
   value       = module.workload_identity.k8s_service_account_namespace
   description = "Namespace of k8s service account."
 }
+output "deployment" {
+  value       = var.app["deploy"] ? helm_release.this[0].metadata : []
+  description = "The state of the helm deployment"
+}
