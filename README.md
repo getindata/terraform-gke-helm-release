@@ -19,17 +19,13 @@
 
 ---
 
-_Brief Description of MODULE:_
-
-* _What it does_
-* _What technologies it uses_
-
-> **Warning**:
-> _When using "Invicton-Labs/deepmerge/null" module - pin `tflint` version to `v0.41.0` in [pre-commit.yaml](.github/workflows/pre-commit.yml) to avoid failing `tflint` checks_
+Terraform module for GCP and K8S ServiceAccounts
+* Can create IAM Service Account binding to roles/iam.workloadIdentityUser
+* Can create a Google Service Account
+* Can create a a Kubernetes Service Account
+* Link both accounts 
 
 ## USAGE
-
-_Example usage of the module - terraform code snippet_
 
 ```terraform
 module "template" {
