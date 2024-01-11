@@ -7,13 +7,17 @@ variable "project_id" {
   description = "GCP project ID"
   type        = string
 }
-variable "repository" {
-  description = "Helm repository"
-  type        = string
-}
 variable "app" {
   description = "an application to deploy"
   type        = map(any)
+  default = {
+    deploy     = true
+    name       = null
+    chart      = null
+    repository = null
+    version    = null
+    path       = null
+  }
 }
 variable "values" {
   description = "Extra values"

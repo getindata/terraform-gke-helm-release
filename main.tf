@@ -8,8 +8,9 @@ module "workload_identity" {
 }
 
 resource "helm_release" "this" {
+  depends_on = [module.workload_identity]
   count      = var.app["deploy"] ? 1 : 0
-  repository = var.repository
+  repository = var.app["repository"]
   name       = var.app["name"]
   chart      = var.app["chart"]
   version    = var.app["version"]
