@@ -23,7 +23,8 @@ Terraform module for GCP and K8S ServiceAccounts
 * Can create IAM Service Account binding to roles/iam.workloadIdentityUser
 * Can create a Google Service Account with appropriate permissions
 * Can create a Kubernetes Service Account
-* Link both accounts 
+* Link both accounts (GCP ServiceAccount and K8S ServiceAccount) 
+* Can use created ServiceAccount in helm deployment to establish connection between GCP and K8S with appropriate permissions
 
 ## USAGE
 Local Chart - simple example
@@ -66,9 +67,6 @@ module "terraform_gke_helm_release" {
   }
 }
 ```
-## NOTES
-
-_Additional information that should be made public, for ex. how to solve known issues, additional descriptions/suggestions_
 
 ## EXAMPLES
 
