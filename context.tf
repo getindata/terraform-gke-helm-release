@@ -103,7 +103,7 @@ variable "enabled" {
 variable "namespace" {
   type        = string
   default     = "default"
-  description = "ID element. Usually an abbreviation of your organization name, e.g. 'eg' or 'cp', to help ensure generated IDs are globally unique"
+  description = "Namespace for the Kubernetes service account"
 }
 
 variable "tenant" {
@@ -127,11 +127,7 @@ variable "stage" {
 variable "name" {
   type        = string
   default     = "example-name"
-  description = <<-EOT
-    ID element. Usually the component or solution name, e.g. 'app' or 'jenkins'.
-    This is the only ID element not also included as a `tag`.
-    The "name" tag is set to the full `id` string. There is no tag with the value of the `name` input.
-    EOT
+  description = "Name for both service accounts. The GCP SA will be truncated to the first 30 chars if necessary."
 }
 
 variable "delimiter" {

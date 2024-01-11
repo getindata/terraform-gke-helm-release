@@ -8,7 +8,7 @@ variable "project_id" {
   type        = string
 }
 variable "app" {
-  description = "an application to deploy"
+  description = "An application to deploy with specific values Here you can specify: The name of the application to deploy,Chart name, Repository address, Chart version and path to ServiceAccount value in values.yaml"
   type        = map(any)
   default = {
     deploy     = true
@@ -20,6 +20,6 @@ variable "app" {
   }
 }
 variable "values" {
-  description = "Extra values"
+  description = "Chart extra values"
   type        = string
 }
