@@ -21,7 +21,7 @@ resource "helm_release" "this" {
 
   set {
     name  = var.app["path"]
-    value = "module.workload_identity.k8s_service_account_name"
+    value = module.workload_identity.k8s_service_account_name
   }
 
 }
