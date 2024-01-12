@@ -1,27 +1,45 @@
 module "workload_identity" {
+  count      = module.this.enabled ? 1 : 0
   source     = "terraform-google-modules/kubernetes-engine/google//modules/workload-identity"
   version    = "v29.0.0"
-  name       = var.name
-  namespace  = var.namespace
+  name       = local.name_from_descriptor
+  namespace  = var.kubernetes_namespace
   project_id = var.project_id
   roles      = var.roles
 }
 
 resource "helm_release" "this" {
-  depends_on = [module.workload_identity]
-  count      = var.app["deploy"] ? 1 : 0
-  repository = var.app["repository"]
-  name       = var.app["name"]
-  chart      = var.app["chart"]
-  version    = var.app["version"]
+  count      = module.this.enabled ? 1 : 0
+  repository = var.app.repository
+  name       = var.app.name
+  chart      = var.app.chart
+  version    = var.app.version
+  namespace  = var.kubernetes_namespace
 
-  values = [
-    file(var.values)
-  ]
+  values = var.values
 
-  set {
-    name  = var.app["path"]
-    value = module.workload_identity.k8s_service_account_name
+  dynamic "set" {
+    iterator = item
+    for_each = var.set == null ? [] : var.set
+
+    content {
+      name  = item.value.name
+      value = item.value.value
+    }
   }
 
+  dynamic "set_sensitive" {
+    iterator = item
+    for_each = var.set_sensitive == null ? [] : var.set_sensitive
+
+    content {
+      name  = item.value.path
+      value = item.value.value
+    }
+  }
+
+  set {
+    name  = var.service_account_value_path
+    value = module.workload_identity[0].k8s_service_account_name
+  }
 }
