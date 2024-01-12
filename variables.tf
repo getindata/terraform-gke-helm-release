@@ -69,5 +69,5 @@ variable "set_sensitive" {
 variable "descriptor_name" {
   description = "Name of the descriptor used to form a resource name"
   type        = string
-  default     = "example-name"
+  default     = "gcp-service-account"
 }
