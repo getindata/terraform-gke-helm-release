@@ -31,7 +31,9 @@ module "terraform_gke_helm_release" {
   source                = "getindata/terraform-gke-helm-release"
   kubernetes_namespace  = "default"
   project_id            = "example-project"
-  values                = "test-chart/values.yaml"
+    values = [
+      file("./test-chart/values.yaml")
+    ]
   roles                 = ["roles/storage.admin"]
 
   app = {
@@ -51,7 +53,15 @@ module "terraform_gke_helm_release" {
   source                = "getindata/terraform-gke-helm-release"
   kubernetes_namespace  = "default"
   project_id            = "example-project"
-  values                = "extra-values/values.yaml"
+  descriptor_formats = {
+      gcp-service-account = {
+        labels = ["namespace", "environment", "name"]
+        format = "sa-%v-%v-%v"
+      }
+    }
+    values = [templatefile("./extra-values/values.yaml", {
+      replicaCount = 2
+    })]
   roles                 = ["roles/compute.admin"]
 
   app = {
