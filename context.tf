@@ -126,7 +126,6 @@ variable "stage" {
 
 variable "name" {
   type        = string
-  default     = null
   description = <<-EOT
     ID element. Usually the component or solution name, e.g. 'app' or 'jenkins'.
     This is the only ID element not also included as a `tag`.
@@ -275,5 +274,4 @@ variable "descriptor_formats" {
     Default is `{}` (`descriptors` output will be empty).
     EOT
 }
-
 #### End of copy of cloudposse/terraform-null-label/variables.tf

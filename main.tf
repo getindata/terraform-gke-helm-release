@@ -1,36 +1,45 @@
-# Example resource that outputs the input value and 
-# echoes it's base64 encoded version locally 
-
-resource "null_resource" "output_input" {
-  count = local.enabled ? 1 : 0
-
-  triggers = {
-    name  = local.name_from_descriptor
-    input = var.example_var
-  }
-
-  provisioner "local-exec" {
-    command = "echo ${var.example_var} | base64"
-  }
+module "workload_identity" {
+  count      = module.this.enabled ? 1 : 0
+  source     = "terraform-google-modules/kubernetes-engine/google//modules/workload-identity"
+  version    = "v29.0.0"
+  name       = local.name_from_descriptor
+  namespace  = var.kubernetes_namespace
+  project_id = var.project_id
+  roles      = var.roles
 }
 
-module "subresource_label" {
-  source  = "cloudposse/label/null"
-  version = "0.25.0"
-  context = module.this.context
+resource "helm_release" "this" {
+  count      = module.this.enabled ? 1 : 0
+  repository = var.app.repository
+  name       = var.app.name
+  chart      = var.app.chart
+  version    = var.app.version
+  namespace  = var.kubernetes_namespace
 
-  attributes = ["sub"]
-}
+  values = var.values
 
-resource "null_resource" "subresource" {
-  count = local.enabled ? 1 : 0
+  dynamic "set" {
+    iterator = item
+    for_each = var.set == null ? [] : var.set
 
-  triggers = {
-    name  = local.subresource_name_from_descriptor
-    input = var.sub_resource.example_var
+    content {
+      name  = item.value.name
+      value = item.value.value
+    }
   }
 
-  provisioner "local-exec" {
-    command = "echo ${var.sub_resource.example_var} | base64"
+  dynamic "set_sensitive" {
+    iterator = item
+    for_each = var.set_sensitive == null ? [] : var.set_sensitive
+
+    content {
+      name  = item.value.path
+      value = item.value.value
+    }
+  }
+
+  set {
+    name  = var.service_account_value_path
+    value = module.workload_identity[0].k8s_service_account_name
   }
 }

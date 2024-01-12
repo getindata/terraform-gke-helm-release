@@ -1,4 +1,4 @@
-output "example_output" {
-  description = "Example output of the module"
-  value       = module.terraform_module_template
+output "storage_integration" {
+  description = "Terraform gke helm release module outputs"
+  value       = module.terraform_gke_helm_release
 }

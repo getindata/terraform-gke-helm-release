@@ -1,8 +1,20 @@
-module "terraform_module_template" {
-  source = "../../"
+module "terraform_gke_helm_release" {
+  source               = "../../"
+  kubernetes_namespace = "default"
+  project_id           = "example-project"
+  name                 = "example-name"
+  values = [
+    file("./test-chart/values.yaml")
+  ]
+  service_account_value_path = "serviceAccount.name"
 
-  example_var = "This is a example value."
-  sub_resource = {
-    example_var = "This is a example value of sub resource."
+  app = {
+    name          = "example-name"
+    chart         = "./test-chart"
+    repository    = null
+    version       = null
+    force_update  = true
+    wait          = false
+    recreate_pods = false
   }
 }
