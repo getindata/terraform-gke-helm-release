@@ -28,10 +28,11 @@ Terraform module for GCP and K8S ServiceAccounts
 Local Chart - simple example
 ```terraform
 module "terraform_gke_helm_release" {
-  source                = "getindata/terraform-gke-helm-release"
-  kubernetes_namespace  = "default"
-  project_id            = "example-project"
-  name                  = "example-name"
+  source                     = "getindata/terraform-gke-helm-release"
+  kubernetes_namespace       = "default"
+  project_id                 = "example-project"
+  name                       = "example-name"
+  service_account_value_path = "serviceAccount.name"
   values = [
    file("./test-chart/values.yaml")
   ]
@@ -40,7 +41,6 @@ module "terraform_gke_helm_release" {
   app = {
     name          = "example-name"
     chart         = "./test-chart"
-    path          = "serviceAccount.name"
     force_update  = true
     wait          = false
     recreate_pods = false
@@ -51,10 +51,11 @@ module "terraform_gke_helm_release" {
 Public Chart - complete example
 ```terraform
 module "terraform_gke_helm_release" {
-  source                = "getindata/terraform-gke-helm-release"
-  kubernetes_namespace  = "default"
-  project_id            = "example-project"
-  name                  = "example-name"
+  source                     = "getindata/terraform-gke-helm-release"
+  kubernetes_namespace       = "default"
+  project_id                 = "example-project"
+  name                       = "example-name"
+  service_account_value_path = "serviceAccount.name"
   descriptor_formats = {
    gcp-service-account = {
     labels = ["namespace", "environment", "name"]
@@ -69,7 +70,6 @@ module "terraform_gke_helm_release" {
   app = {
     name          = "example-name"
     chart         = "nginx"
-    path          = "serviceAccount.name"
     repository    = "https://charts.bitnami.com/bitnami"
     version       = "15.6.1"
     force_update  = true
