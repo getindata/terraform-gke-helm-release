@@ -1,7 +1,6 @@
 descriptor_formats = {
-
-}
-
-tags = {
-  Terraform = "True"
+  gcp-service-account = {
+    labels = ["namespace", "environment", "name"]
+    format = "sa-%v-%v-%v"
+  }
 }

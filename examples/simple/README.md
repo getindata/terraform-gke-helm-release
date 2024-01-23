@@ -1,17 +1,31 @@
 # Simple Example
 
 ```terraform
-module "terraform_module_template" {
-  source = "../../"
+module "terraform_gke_helm_release" {
+  source               = "../../"
+  kubernetes_namespace = "default"
+  project_id           = "example-project"
+  name                 = "example-name"
+  values = [
+    file("./test-chart/values.yaml")
+  ]
 
-  example_var = "This is a example value."
-  sub_resource = {
-    example_var = "This is a example value of sub resource."
+  service_account_value_path = "serviceAccount.name"
+
+  app = {
+    name          = "example-name"
+    chart         = "./test-chart"
+    repository    = null
+    version       = null
+    force_update  = true
+    wait          = false
+    recreate_pods = false
   }
 }
 ```
 
 ## Usage
+
 ```
 terraform init
 terraform plan -out tfplan
