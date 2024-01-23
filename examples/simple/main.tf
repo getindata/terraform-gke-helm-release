@@ -6,6 +6,7 @@ module "terraform_gke_helm_release" {
   values = [
     file("./test-chart/values.yaml")
   ]
+
   service_account_value_path = "serviceAccount.name"
 
   app = {
