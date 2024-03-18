@@ -147,7 +147,7 @@ module "terraform_gke_helm_release" {
 | Name | Version |
 |------|---------|
 | <a name="provider_helm"></a> [helm](#provider\_helm) | >= 2.0, < 3.0 |
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | n/a |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | >= 2.0, < 3.0 |
 
 ## Requirements
 
@@ -155,6 +155,7 @@ module "terraform_gke_helm_release" {
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
 | <a name="requirement_helm"></a> [helm](#requirement\_helm) | >= 2.0, < 3.0 |
+| <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | >= 2.0, < 3.0 |
 
 ## Resources
 
