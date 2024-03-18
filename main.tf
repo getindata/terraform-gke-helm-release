@@ -3,19 +3,18 @@ module "workload_identity" {
   source     = "terraform-google-modules/kubernetes-engine/google//modules/workload-identity"
   version    = "v29.0.0"
   name       = local.name_from_descriptor
-  namespace  = var.kubernetes_namespace
+  namespace  = coalesce(kubernetes_namespace.this[0].metadata[0].name, var.kubernetes_namespace)
   project_id = var.project_id
   roles      = var.roles
 }
 
 resource "helm_release" "this" {
-  count            = module.this.enabled ? 1 : 0
-  repository       = var.app.repository
-  name             = var.app.name
-  chart            = var.app.chart
-  version          = var.app.version
-  namespace        = var.kubernetes_namespace
-  create_namespace = var.create_namespace
+  count      = module.this.enabled ? 1 : 0
+  repository = var.app.repository
+  name       = var.app.name
+  chart      = var.app.chart
+  version    = var.app.version
+  namespace  = var.kubernetes_namespace
 
   values = var.values
 
@@ -42,5 +41,12 @@ resource "helm_release" "this" {
   set {
     name  = var.service_account_value_path
     value = module.workload_identity[0].k8s_service_account_name
+  }
+}
+
+resource "kubernetes_namespace" "this" {
+  count = module.this.enabled && var.create_namespace ? 1 : 0
+  metadata {
+    name = var.kubernetes_namespace
   }
 }
