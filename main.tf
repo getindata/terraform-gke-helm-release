@@ -9,12 +9,13 @@ module "workload_identity" {
 }
 
 resource "helm_release" "this" {
-  count      = module.this.enabled ? 1 : 0
-  repository = var.app.repository
-  name       = var.app.name
-  chart      = var.app.chart
-  version    = var.app.version
-  namespace  = var.kubernetes_namespace
+  count            = module.this.enabled ? 1 : 0
+  repository       = var.app.repository
+  name             = var.app.name
+  chart            = var.app.chart
+  version          = var.app.version
+  namespace        = var.kubernetes_namespace
+  create_namespace = var.create_namespace
 
   values = var.values
 
