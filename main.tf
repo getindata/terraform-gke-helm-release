@@ -3,7 +3,7 @@ module "workload_identity" {
   source     = "terraform-google-modules/kubernetes-engine/google//modules/workload-identity"
   version    = "v29.0.0"
   name       = local.name_from_descriptor
-  namespace  = var.kubernetes_namespace
+  namespace  = coalesce(one(kubernetes_namespace.this[*].metadata[*].name), var.kubernetes_namespace)
   project_id = var.project_id
   roles      = var.roles
 }
