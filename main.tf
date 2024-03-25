@@ -1,7 +1,7 @@
 module "workload_identity" {
   count      = module.this.enabled ? 1 : 0
   source     = "terraform-google-modules/kubernetes-engine/google//modules/workload-identity"
-  version    = "v29.0.0"
+  version    = "30.2.0"
   name       = local.name_from_descriptor
   namespace  = coalesce(kubernetes_namespace.this[0].metadata[0].name, var.kubernetes_namespace)
   project_id = var.project_id
